@@ -1,4 +1,4 @@
-import { getRandFloat } from "../src/utils/getRandNum.js"
+import { getRandFloat } from "../utils/getRandNum.js"
 import { arrayMean } from "./utils/arrayMean.js"
 import { trainImages, trainLabels, testImages, testLabels } from "./getData.js"
 const trainImagesLimited = trainImages.slice(0, 10000)
