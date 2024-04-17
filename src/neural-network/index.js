@@ -1,10 +1,10 @@
-import { getRandFloat } from "../utils/getRandNum.js"
 import { arrayMean } from "./utils/arrayMean.js"
 import { trainImages, trainLabels, testImages, testLabels } from "./getData.js"
-const trainImagesLimited = trainImages.slice(0, 10000)
-const trainLabelsLimited = trainLabels.slice(0, 10000)
-const testImagesLimited = testImages.slice(0, 1000)
-const testLabelsLimited = testLabels.slice(0, 1000)
+import { getRandFloat } from "../utils/getRandNum.js"
+const trainImagesLimited = trainImages
+const trainLabelsLimited = trainLabels
+const testImagesLimited = testImages
+const testLabelsLimited = testLabels
 const learningRate = 0.001
 const batch = 64
 let weights0 = []

@@ -62,10 +62,10 @@ export const renderImage = (image) => {
 }
 
 // Replace 'path_to_file' with the actual paths to your MNIST dataset files
-export const trainImages = readMNISTImages('data/train-images-idx3-ubyte/train-images-idx3-ubyte');
-export const trainLabels = readMNISTLabels('data/train-labels-idx1-ubyte/train-labels-idx1-ubyte');
-export const testImages = readMNISTImages('data/t10k-images-idx3-ubyte/t10k-images-idx3-ubyte');
-export const testLabels = readMNISTLabels('data/t10k-labels-idx1-ubyte/t10k-labels-idx1-ubyte');
+export const trainImages = readMNISTImages('src/neural-network/data/train-images-idx3-ubyte/train-images-idx3-ubyte');
+export const trainLabels = readMNISTLabels('src/neural-network/data/train-labels-idx1-ubyte/train-labels-idx1-ubyte');
+export const testImages = readMNISTImages('src/neural-network/data/t10k-images-idx3-ubyte/t10k-images-idx3-ubyte');
+export const testLabels = readMNISTLabels('src/neural-network/data/t10k-labels-idx1-ubyte/t10k-labels-idx1-ubyte');
 export const inputData = trainImages[0].flat()
 
 
