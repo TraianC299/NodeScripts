@@ -1,6 +1,6 @@
 import fs from 'fs'
 // Function to read MNIST files
-function readMNISTImages(filePath) {
+function readMNISTImages(filePath:string) {
   const buffer = fs.readFileSync(filePath);
   const headerCount = 4; // For image files, the first 4 values in the header are magic number, number of images, number of rows, and number of columns.
   const headerValues = [];
@@ -24,14 +24,14 @@ function readMNISTImages(filePath) {
       }
       image.push(row);
     }
-    images.push(image);
+    images.push(image.flat());
   }
 
   return images;
 }
 
 // Function to read MNIST labels
-function readMNISTLabels(filePath) {
+function readMNISTLabels(filePath:string) {
   const buffer = fs.readFileSync(filePath);
   const headerCount = 2; // For label files, the first 2 values in the header are magic number and number of items.
   const labelCount = buffer.readInt32BE(4); // Number of labels is the second 32-bit integer.
@@ -46,7 +46,7 @@ function readMNISTLabels(filePath) {
 }
 
 
-export const renderImage = (image) => {
+export const renderImage = (image:number[][]) => {
   let str = '';
   for (let i = 0; i < image.length; i++) {
     for (let j = 0; j < image[i].length; j++) {

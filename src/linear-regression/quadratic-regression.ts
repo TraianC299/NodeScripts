@@ -1,11 +1,10 @@
-import ExcelJS from 'exceljs';
 import { plot } from 'nodeplotlib';
-import { partialDerivative } from '../utils/derivatives.js';
-import { getRealEstateData } from './getRealEstateData.js';
+import { getRealEstateData } from './getRealEstateData';
+import { partialDerivative } from './utils/derivatives';
 async function main() {
     const values = await getRealEstateData();
 
-    const predict = (a, b, c, age) => {
+    const predict = (a: number, b: number, c: number, age: number) => {
         return (a * (age ** 2)) + (b * age) + c;
     }
 
@@ -15,7 +14,7 @@ async function main() {
     let c = 0;
     const learningRate = 0.0001;
     // mean squared error
-    const errorFunction = (a, b, c) => {
+    const errorFunction = (a: number, b: number, c: number) => {
         return 1 / n * values.reduce((accumulator, currentValue) => {
             const error = currentValue.price - predict(a, b, c, currentValue.age);
             return accumulator + error ** 2; // Squaring the error
@@ -32,7 +31,7 @@ async function main() {
         c -= learningRate * partialDerivative(errorFunction, [a, b, c], 2);
         const currentError = errorFunction(a, b, c);
         console.log(currentError);
-    
+
         if (Math.abs(prevError - currentError) < convergenceThreshold) {
             console.log(`Convergence reached at iteration ${i}`);
             break;

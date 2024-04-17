@@ -2,11 +2,10 @@
   "name": "ecel",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
-  "type": "module",
+  "main": "/src/neural-network/index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start-nn": "node src/neural-network/index.js"  
+    "start-nn": "ts-node src/neural-network/index.ts"
   },
   "author": "",
   "license": "ISC",

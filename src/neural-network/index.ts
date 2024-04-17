@@ -1,54 +1,24 @@
-import { arrayMean } from "./utils/arrayMean.js"
-import { trainImages, trainLabels, testImages, testLabels } from "./getData.js"
-import { getRandFloat } from "../utils/getRandNum.js"
-const trainImagesLimited = trainImages
-const trainLabelsLimited = trainLabels
-const testImagesLimited = testImages
-const testLabelsLimited = testLabels
+import { trainImages, trainLabels, testImages, testLabels } from "./getData"
+import {arrayMean, costFunctionDerivative, dotProduct, getRandFloat, relu, reluDerivative, softmax, softmaxDerivative} from './utils/maths'
+
+const trainImagesLimited = trainImages.slice(0, 2000)
+const trainLabelsLimited = trainLabels.slice(0, 2000)
+const testImagesLimited = testImages.slice(0, 2000)
+const testLabelsLimited = testLabels.slice(0, 2000)
 const learningRate = 0.001
 const batch = 64
-let weights0 = []
-let neurons0 = []
-let z0 = []
-let weights1 = []
-let neurons1 = []
-let z1 = []
+let weights0: number[][] = []
+let neurons0: number[] = []
+let z0: number[] = []
+let weights1: number[][] = []
+let neurons1: number[] = []
+let z1: number[]= []
 
-let weights0Changes = []
-let weights1Changes = []
-function dotProduct(arr1, arr2) {
-    return arr1.reduce((acc, curr, index) => acc + curr * arr2[index], 0);
-}
-const relu = (x) => Math.max(0, x)
-const reluDerivative = (x) => x > 0 ? 1 : 0
+let weights0Changes: number[][][] = []
+let weights1Changes: number[][][] = []
 
-const costFunction = (output, target) => Math.pow(output - target, 2)
-const costFunctionDerivative = (output, target) => 2 * (output - target)
 
-function softmax(scores) {
-    let maxScore = Math.max(...scores);
-    let exps = scores.map(score => Math.exp(score - maxScore)); // Improve numerical stability
-    let sumExps = exps.reduce((sum, exp) => sum + exp, 0);
-    return exps.map(exp => exp / sumExps);
-}
-
-function softmaxDerivative(scores) {
-    const probabilities = softmax(scores);
-    const jacobianMatrix = [];
-
-    for (let i = 0; i < probabilities.length; i++) {
-        jacobianMatrix[i] = [];
-        for (let j = 0; j < probabilities.length; j++) {
-            if (i === j) {
-                jacobianMatrix[i][j] = probabilities[i] * (1 - probabilities[i]);
-            } else {
-                jacobianMatrix[i][j] = -probabilities[i] * probabilities[j];
-            }
-        }
-    }
-    return jacobianMatrix;
-}
-const createOutputArrayFromLabel = (number) => {
+const createOutputArrayFromLabel = (number:number) => {
     const arr = Array(10).fill(0)
     arr[number] = 1
     return arr
@@ -81,10 +51,10 @@ function initialize() {
 
 function train() {
     // train the model
-    trainImagesLimited.forEach((image, index) => {
+    trainImagesLimited.forEach((image:number[], index:number) => {
         console.log('train ' + index)
-        feedForward(image.flat())
-        feedBackward(image.flat(), neurons1, createOutputArrayFromLabel(trainLabelsLimited[index]))
+        feedForward(image)
+        feedBackward(image, neurons1, createOutputArrayFromLabel(trainLabelsLimited[index]))
         if (index % batch === 0 && index !== 0) {
             console.log('update weights')
             updateWeights()
@@ -94,7 +64,7 @@ function train() {
 
 
 
-function feedForward(inputArray) {
+function feedForward(inputArray:number[]) {
     neurons0 = []
     z0 = []
     neurons1 = []
@@ -112,7 +82,7 @@ function feedForward(inputArray) {
     neurons1 = softmax(z1)
 }
 
-function feedBackward(input, predicted, target) {
+function feedBackward(input:number[], predicted:number[], target:number[]) {
     // const cost = z1.map((predicted, index) => costFunction(predicted, target[index]));
     const outputDerivatives = predicted.map((predictedValue, index) => costFunctionDerivative(predictedValue, target[index]));
     const softmaxActivationsDerivatives = softmaxDerivative(z1)
@@ -152,9 +122,9 @@ function feedBackward(input, predicted, target) {
 // test the model
 const testModel = () => {
     let correct = 0
-    testImagesLimited.forEach((image, index) => {
+    testImagesLimited.forEach((image:number[], index:number) => {
         console.log('test ' + index)
-        feedForward(image.flat())
+        feedForward(image)
         const maxIndex = neurons1.indexOf(Math.max(...neurons1))
         if (maxIndex === testLabelsLimited[index]) {
             correct++
@@ -184,33 +154,14 @@ function updateWeights() {
 
 initialize()
 train()
-
-//if user presses 't' key, test the model, in nodejs
-process.stdin.setRawMode(true);
-process.stdin.resume();
-process.stdin.on('data', function (chunk, key) {
-    if (chunk[0] === 116) {
-        testModel()
-    }
-});
-
 testModel()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//if user presses 't' key, test the model, in nodejs
+// process.stdin.setRawMode(true);
+// process.stdin.resume();
+// process.stdin.on('data', function (chunk, key) {
+//     if (chunk[0] === 116) {
+//         testModel()
+//     }
+// });
 
 

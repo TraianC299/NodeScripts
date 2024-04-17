@@ -1,17 +1,17 @@
 import { plot } from 'nodeplotlib';
-import { partialDerivative } from '../src/utils/derivatives.js';
-import { getRealEstateData } from './getRealEstateData.js';
+import { getRealEstateData } from './getRealEstateData';
+import { partialDerivative } from './utils/derivatives';
 async function main() {
     const values = await getRealEstateData();
 
     const n = values.length;
     let m = 0; let b = 0; let c = 0;
-    const prediction = (m, b, c, age, stores) => {
+    const prediction = (m:number, b:number, c:number, age:number, stores:number) => {
         return m * age + b * stores + c;
     }
     const learningRate = 0.001;
     // mean squared error
-    const errorFunction = (m, b, c) => {
+    const errorFunction = (m:number, b:number, c:number) => {
         return 1 / n * values.reduce((accumulator, currentValue) => {
             const error = currentValue.price - prediction(m, b, c, currentValue.age, currentValue.stores);
             return accumulator + error * error; // Squaring the error
